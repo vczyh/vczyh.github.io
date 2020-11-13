@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>虚拟机类加载机制 | VCZYH</title>
+    <meta name="generator" content="VuePress 1.5.0">
+    
+    <meta name="description" content="虽不会写诗，但志在远方。">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <link rel="preload" href="/assets/css/0.styles.d575fe45.css" as="style"><link rel="preload" href="/assets/js/app.e21cda02.js" as="script"><link rel="preload" href="/assets/js/3.c54ea6da.js" as="script"><link rel="preload" href="/assets/js/1.8a6c8a3f.js" as="script"><link rel="preload" href="/assets/js/33.459f616a.js" as="script"><link rel="prefetch" href="/assets/js/10.8182b169.js"><link rel="prefetch" href="/assets/js/11.cdfed804.js"><link rel="prefetch" href="/assets/js/12.398afd20.js"><link rel="prefetch" href="/assets/js/13.9ba58032.js"><link rel="prefetch" href="/assets/js/14.e98cb686.js"><link rel="prefetch" href="/assets/js/15.89df4d42.js"><link rel="prefetch" href="/assets/js/16.63efb478.js"><link rel="prefetch" href="/assets/js/17.0d2f280b.js"><link rel="prefetch" href="/assets/js/18.724e39c8.js"><link rel="prefetch" href="/assets/js/19.f5c3121a.js"><link rel="prefetch" href="/assets/js/20.34d98b79.js"><link rel="prefetch" href="/assets/js/21.61095a70.js"><link rel="prefetch" href="/assets/js/22.dc17f1d0.js"><link rel="prefetch" href="/assets/js/23.5940d698.js"><link rel="prefetch" href="/assets/js/24.0b1321d4.js"><link rel="prefetch" href="/assets/js/25.33593c03.js"><link rel="prefetch" href="/assets/js/26.6f209b6c.js"><link rel="prefetch" href="/assets/js/27.ac928d09.js"><link rel="prefetch" href="/assets/js/28.295cbeb0.js"><link rel="prefetch" href="/assets/js/29.f38d7a26.js"><link rel="prefetch" href="/assets/js/30.babbbfb6.js"><link rel="prefetch" href="/assets/js/31.1c46d333.js"><link rel="prefetch" href="/assets/js/32.44ae445d.js"><link rel="prefetch" href="/assets/js/34.91405a43.js"><link rel="prefetch" href="/assets/js/35.0a7e6ea6.js"><link rel="prefetch" href="/assets/js/36.0b539230.js"><link rel="prefetch" href="/assets/js/37.a04031ac.js"><link rel="prefetch" href="/assets/js/4.757f30d9.js"><link rel="prefetch" href="/assets/js/5.2688c9ee.js"><link rel="prefetch" href="/assets/js/6.4e36e6aa.js"><link rel="prefetch" href="/assets/js/7.c18b5337.js"><link rel="prefetch" href="/assets/js/8.9376a1a2.js"><link rel="prefetch" href="/assets/js/9.901a424a.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.d575fe45.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container" data-v-2d5f533b><div data-v-2d5f533b><div id="loader-wrapper" class="loading-wrapper" data-v-d48f4d20 data-v-2d5f533b data-v-2d5f533b><div class="loader-main" data-v-d48f4d20><div data-v-d48f4d20></div><div data-v-d48f4d20></div><div data-v-d48f4d20></div><div data-v-d48f4d20></div></div> <!----> <!----></div> <div class="password-shadow password-wrapper-out" style="display:none;" data-v-64685f0e data-v-2d5f533b data-v-2d5f533b><h3 class="title" style="display:none;" data-v-64685f0e data-v-64685f0e>VCZYH</h3> <!----> <label id="box" class="inputBox" style="display:none;" data-v-64685f0e data-v-64685f0e><input type="password" value="" data-v-64685f0e> <span data-v-64685f0e>Konck! Knock!</span> <button data-v-64685f0e>OK</button></label> <div class="footer" style="display:none;" data-v-64685f0e data-v-64685f0e><span data-v-64685f0e><i class="iconfont reco-theme" data-v-64685f0e></i> <a target="blank" href="https://vuepress-theme-reco.recoluan.com" data-v-64685f0e>vuePress-theme-reco</a></span> <span data-v-64685f0e><i class="iconfont reco-copyright" data-v-64685f0e></i> <a data-v-64685f0e><span data-v-64685f0e>vczyh</span>
+            
+          <span data-v-64685f0e>2018 - </span>
+          2020
+        </a></span></div></div> <div class="hide" data-v-2d5f533b><header class="navbar" data-v-2d5f533b><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/avatar.jpg" alt="VCZYH" class="logo"> <span class="site-name">VCZYH</span></a> <div class="links"><div class="color-picker"><a class="color-button"><i class="iconfont reco-color"></i></a> <div class="color-picker-menu" style="display:none;"><div class="mode-options"><h4 class="title">Choose mode</h4> <ul class="color-mode-options"><li class="dark">dark</li><li class="auto active">auto</li><li class="light">light</li></ul></div></div></div> <div class="search-box"><i class="iconfont reco-search"></i> <input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link"><i class="iconfont reco-home"></i>
+  首页
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title"><i class="iconfont reco-category"></i>
+      分类
+    </span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/后端/" class="nav-link"><i class="iconfont undefined"></i>
+  后端
+</a></li><li class="dropdown-item"><!----> <a href="/categories/随笔/" class="nav-link"><i class="iconfont undefined"></i>
+  随笔
+</a></li><li class="dropdown-item"><!----> <a href="/categories/前端/" class="nav-link"><i class="iconfont undefined"></i>
+  前端
+</a></li><li class="dropdown-item"><!----> <a href="/categories/编程/" class="nav-link"><i class="iconfont undefined"></i>
+  编程
+</a></li></ul></div></div><div class="nav-item"><a href="/tag/" class="nav-link"><i class="iconfont reco-tag"></i>
+  标签云
+</a></div><div class="nav-item"><a href="/timeline/" class="nav-link"><i class="iconfont reco-date"></i>
+  时间轴
+</a></div><div class="nav-item"><a href="/note/" class="nav-link router-link-active"><i class="iconfont reco-message"></i>
+  笔记
+</a></div><div class="nav-item"><a href="/other/leave/" class="nav-link"><i class="iconfont reco-suggestion"></i>
+  留言板
+</a></div><div class="nav-item"><a href="/other/friend/" class="nav-link"><i class="iconfont undefined"></i>
+  友链
+</a></div><div class="nav-item"><a href="/other/about/" class="nav-link"><i class="iconfont undefined"></i>
+  About
+</a></div> <!----></nav></div></header> <div class="sidebar-mask" data-v-2d5f533b></div> <aside class="sidebar" data-v-2d5f533b><div class="personal-info-wrapper" data-v-ca798c94 data-v-2d5f533b><img src="/avatar.jpg" alt="author-avatar" class="personal-img" data-v-ca798c94> <h3 class="name" data-v-ca798c94>
+    vczyh
+  </h3> <div class="num" data-v-ca798c94><div data-v-ca798c94><h3 data-v-ca798c94>16</h3> <h6 data-v-ca798c94>文章</h6></div> <div data-v-ca798c94><h3 data-v-ca798c94>17</h3> <h6 data-v-ca798c94>标签</h6></div></div> <hr data-v-ca798c94></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link"><i class="iconfont reco-home"></i>
+  首页
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title"><i class="iconfont reco-category"></i>
+      分类
+    </span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/后端/" class="nav-link"><i class="iconfont undefined"></i>
+  后端
+</a></li><li class="dropdown-item"><!----> <a href="/categories/随笔/" class="nav-link"><i class="iconfont undefined"></i>
+  随笔
+</a></li><li class="dropdown-item"><!----> <a href="/categories/前端/" class="nav-link"><i class="iconfont undefined"></i>
+  前端
+</a></li><li class="dropdown-item"><!----> <a href="/categories/编程/" class="nav-link"><i class="iconfont undefined"></i>
+  编程
+</a></li></ul></div></div><div class="nav-item"><a href="/tag/" class="nav-link"><i class="iconfont reco-tag"></i>
+  标签云
+</a></div><div class="nav-item"><a href="/timeline/" class="nav-link"><i class="iconfont reco-date"></i>
+  时间轴
+</a></div><div class="nav-item"><a href="/note/" class="nav-link router-link-active"><i class="iconfont reco-message"></i>
+  笔记
+</a></div><div class="nav-item"><a href="/other/leave/" class="nav-link"><i class="iconfont reco-suggestion"></i>
+  留言板
+</a></div><div class="nav-item"><a href="/other/friend/" class="nav-link"><i class="iconfont undefined"></i>
+  友链
+</a></div><div class="nav-item"><a href="/other/about/" class="nav-link"><i class="iconfont undefined"></i>
+  About
+</a></div> <!----></nav> <ul class="sidebar-links"><li><a href="/note/" aria-current="page" class="sidebar-link">介绍</a></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>Java 虚拟机</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/note/jvm/jvm-memory-and-exception.html" class="sidebar-link">Java内存区域与内存溢出异常</a></li><li><a href="/note/jvm/jvm-class-file-structure.html" class="sidebar-link">类文件结构</a></li><li><a href="/note/jvm/jvm-class-loading-mechanism.html" aria-current="page" class="active sidebar-link">虚拟机类加载机制</a></li><li><a href="/note/jvm/jvm-byte-code-execution-engine.html" class="sidebar-link">虚拟机字节码执行引擎</a></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Docker</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <div class="password-shadow password-wrapper-in" style="display:none;" data-v-64685f0e data-v-2d5f533b><h3 class="title" style="display:none;" data-v-64685f0e data-v-64685f0e>虚拟机类加载机制</h3> <!----> <label id="box" class="inputBox" style="display:none;" data-v-64685f0e data-v-64685f0e><input type="password" value="" data-v-64685f0e> <span data-v-64685f0e>Konck! Knock!</span> <button data-v-64685f0e>OK</button></label> <div class="footer" style="display:none;" data-v-64685f0e data-v-64685f0e><span data-v-64685f0e><i class="iconfont reco-theme" data-v-64685f0e></i> <a target="blank" href="https://vuepress-theme-reco.recoluan.com" data-v-64685f0e>vuePress-theme-reco</a></span> <span data-v-64685f0e><i class="iconfont reco-copyright" data-v-64685f0e></i> <a data-v-64685f0e><span data-v-64685f0e>vczyh</span>
+            
+          <span data-v-64685f0e>2018 - </span>
+          2020
+        </a></span></div></div> <div data-v-2d5f533b><main class="page"><div class="page-title" style="display:none;"><h1 class="title">虚拟机类加载机制</h1> <div data-v-3b7f5bdf><i class="iconfont reco-account" data-v-3b7f5bdf><span data-v-3b7f5bdf>vczyh</span></i> <i class="iconfont reco-date" data-v-3b7f5bdf><span data-v-3b7f5bdf>2020-02-18</span></i> <i class="iconfont reco-eye" data-v-3b7f5bdf><span id="/note/jvm/jvm-class-loading-mechanism.html" data-flag-title="Your Article Title" class="leancloud-visitors" data-v-3b7f5bdf><a class="leancloud-visitors-count" style="font-size:.9rem;font-weight:normal;color:#999;"></a></span></i> <i class="iconfont reco-tag tags" data-v-3b7f5bdf><span class="tag-item" data-v-3b7f5bdf>Java</span><span class="tag-item" data-v-3b7f5bdf>JVM</span></i></div></div> <div class="theme-reco-content content__default" style="display:none;"><h3 id="概述"><a href="#概述" class="header-anchor">#</a> 概述</h3> <p>与那些在编译时需要进行连接的语言不同，在Java语言中，类型的加载、连接和初始化过程都是在程序运行期间完成的，这种策略让Java语言进行提前编译会面临额外的困难，也会让类加载时稍微增加一些性能开销，但是却为Java应用提供了扩展性和灵活性，Java天生可以动态扩展的语言特性就是依赖运行期动态记载和动态连接这个特点实现的。例如，编写一个面向接口的应用程序，可以等到运行时再指定其实际的实现类，用户可以通过Java预置的或自定义类加载器，让某个本地的应用程序在运行时从网络或其他地方上加载一个二进制流作为其程序代码的一部分。</p> <h3 id="类加载时机"><a href="#类加载时机" class="header-anchor">#</a> 类加载时机</h3> <p>一个类型（类或接口）被加载到虚拟机内存开始，到卸载出内存位置，它的整个生命周期将会经历：<strong>加载（Loading）</strong>、<strong>验证（Verification）</strong>、<strong>准备（Preparation）</strong>、<strong>解析（Resolution）</strong>、<strong>初始化（Initialization）</strong>、**使用（Using）**和 <strong>卸载（Unloading）</strong></p> <p>加载、验证、准备、初始化和卸载这五个阶段的顺序是确定的，类型的加载过程必须按照这种顺序按部就班地开始，而解析阶段则不一定：它在某些情况下可以在初始化阶段之后再开始</p> <p>什么时候开始第一个阶段“加载”并没有强制约束，有且只有六中情况必须立即对类进行“初始化”（而加载、验证、准备自然需要在此之前开始）</p> <ul><li>遇到new、getstatic、putstatic、或invokestatic这四条字节码指令时，能够生成这四条指令的场景有：
+<ul><li>使用new关键字实例化对象的时候</li> <li>读取或设置一个类型的静态字段（被final修饰、已在编译期把结果放入常量池的静态字段除外）的时候</li> <li>调用一个类型的静态方法的时候</li></ul></li> <li>使用 java.lang.reflect 包的方法对类型进行反射调用的时候</li> <li>当初始化类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化</li> <li>当虚拟机启动时，用户需要指定一个要执行的主类（包含main()方法的类），虚拟机会先初始化这个主类</li> <li>当使用JDk7新加入的动态语言支持时，如果一个java.lang.invoke.MethodHandle实例最后的解析结果为REF_getStatic、REF_putStatic、REF_invokeStatic、REF_newInvokeSpecial四种类型的方法句柄，并且这个方法句柄对应的类没有进行初始化，则需要先触发其初始化</li> <li>当一个接口定义了JDK8新加入的默认方法（被default关键字修饰的接口方法）时，如果有这个接口的实现类发生了初始化，那该接口要在其之前被初始化</li></ul> <p>以上行为被称为“主动引用”，除此之外的行为被称为“被动引用”</p> <p>虽然接口中不能使用static语句块，但编译器仍然会为接口生成<code>&lt;clinit&gt;()</code>类构造器，用于初始化接口定义的成员变量，但不同于类的是，当一个接口在初始化时，并不要求其父接口都完成了初始化，只有在真正使用到父接口的时候（如引用接口中定义的常量）才会初始化</p> <p>被动引用示例1：</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token comment">/**
+ * 通过子类引用父类的静态字段，不会导致子类初始化
+ * 对于静态字段，只有直接定义这个字段的类才会被初始化
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SuperClass</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> value <span class="token operator">=</span> <span class="token number">123</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">static</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">&quot;SuperClass init!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">SubClass</span> <span class="token keyword">extends</span> <span class="token class-name">SuperClass</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">static</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">&quot;SubClass init!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">NotInitialization</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">SubClass</span><span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// SuperClass init!</span>
+<span class="token comment">// 123</span>
+</code></pre></div><p>被动引用示例2：</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token comment">/**
+ * 通过数组定义来引用类，不会触发此类的初始化
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SuperClass</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> value <span class="token operator">=</span> <span class="token number">123</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">static</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">&quot;SuperClass init!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">SubClass</span> <span class="token keyword">extends</span> <span class="token class-name">SuperClass</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">static</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">&quot;SubClass init!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">NotInitialization</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">SuperClass</span><span class="token punctuation">[</span><span class="token punctuation">]</span> superClasses <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SuperClass</span><span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 没有任何输出</span>
+</code></pre></div><p>没有任何输出说明没有触发类的初始化，但是这段代码却触发了另一个名为<code>[L包路径.SuperClass</code>的类的初始化阶段，对于用户代码来说，这并不是一个合法的类型名称，它是一个由虚拟机自动生成的、直接继承与<code>java.lang.Object</code>的子类，创建动作由字节码指令newarray触发，这个类代表了一个元素类型为SuperClass的一维数组，数组中应有的属性和方法（用户可以直接使用的只有被修饰为public的length属性和clone()方法）都实现在这个类里，Java对数组的访问比C安全，很大程度上是因为这个类包装了数组元素的访问</p> <p>被动引用示例3：</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token comment">/**
+ * 常量在编译阶段后会存入调用类的常量池中，本质上没有直接引用到定义常量的类
+ * 因此不会触发定义常量的类的初始化
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ConstClass</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">String</span> HELLO_WORLD <span class="token operator">=</span> <span class="token string">&quot;hello world&quot;</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">static</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">&quot;ConstClass init!&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">NotInitialization</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">ConstClass</span><span class="token punctuation">.</span>HELLO_WORLD<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">//  hello world</span>
+</code></pre></div><h3 id="类加载过程"><a href="#类加载过程" class="header-anchor">#</a> 类加载过程</h3> <h4 id="加载"><a href="#加载" class="header-anchor">#</a> 加载</h4> <p>加载阶段，虚拟机需要完成：</p> <ul><li>通过一个类的全限定名来获取定义此类的二进制字节流</li> <li>将这个字节流所代表的静态存储结构转化为方法去的运行时数据结构</li> <li>在内存生成一个代表这个类的<code>java.lang.Class</code>对象，作为方法区这个类的各种数据的访问入口</li></ul> <p>方法区中的数据存储格式完全由虚拟机实现自行定义，加载阶段尚未完成，连接阶段可能已经开始</p> <h4 id="验证"><a href="#验证" class="header-anchor">#</a> 验证</h4> <p>验证是连接阶段的第一步，目的是确保Class文件的字节流中包含的信息符合规范，保证这些信息被当作代码运行后不会危害虚拟机自身的安全</p> <p>验证阶段大致有四个行为：</p> <ul><li><p>文件格式验证：</p> <ul><li>是否以魔数0xCAFEBABE</li> <li>主次版本号是否在当前Java虚拟机接受范围之内</li> <li>常量池的常量中是否有不被支持的常量类型（检查常量的tag标志）</li> <li>指向常量的各种索引值是否有指向不存在的常量或不符合类型的常量</li> <li>CONSTANT_Utf8_info型的常量中是否有不符合UTF-8编码的数据</li> <li>Class文件中各个部分及文件本身是否又被删除的或附加的其他信息</li> <li>......</li></ul> <p>只有通过了这个阶段的验证之后，这段字节流才被允许进入Java虚拟机内存的方法区中进行存储，所以后面的三个验证阶段全部基于方法区的存储结构上进行的，不会再直接读取、操作字节流了</p></li> <li><p>元数据验证：</p> <ul><li>这个类是否有父类（除了<code>java.lang.Object</code>之外，所有的类都应当有父类）</li> <li>这个类是否继承了不允许被继承的类（被final修饰的类）</li> <li>如果这个类不是抽象类，是否实现了其父类或接口之中要求的所有方法</li> <li>类中的字段、方法是否与父类产生矛盾（例如覆盖了父类的final字段，或者出现了不符合规则的方法重载，例如方法参数都一致，但返回类型却不同）</li> <li>......</li></ul></li> <li><p>字节码验证：</p> <ul><li>保证任意时刻操作数栈的数据类型与指令代码序列都能配合工作</li> <li>保证任何跳转指令都不会跳转到方法体以外的字节码指令上</li> <li>保证方法体中的类型转换总是有效的</li> <li>......</li></ul> <p>这阶段主要对类的方法体（Class文件中的Code属性）进行校验分析，保证方法在运行时不会做出危害虚拟机安全的行为</p></li> <li><p>符号引用验证</p> <ul><li>符号引用中通过字符串描述的全限定名是否能找到对应的类</li> <li>在指定类是否存在符合方法的字段描述符及简单名称所描述的方法和字段</li> <li>符合引用中的类、字段、方法的可访问性是否可以被当前类访问</li> <li>......</li></ul> <p>这个阶段的校验行为发生在虚拟机将符号引用转化为直接引用的时候，这个转化动作将在连接的第三阶段——解析阶段中发生，主要目的是确保解析行为能正常执行，如果无法通过符号引用验证，java虚拟机会抛出一个<code>java.lang.IncompatibleClassChangeError</code>的子类异常，典型的有：<code>java.lang.illegalAccessError</code>、<code>java.lang.NoSuchfieldError</code>、<code>java.lang.NoSuchMethodError</code>等</p> <p>可以使用<code>-Xverify:none</code> 参数关闭大部分的类验证措施，以缩短虚拟机类加载时间</p></li></ul> <h4 id="准备"><a href="#准备" class="header-anchor">#</a> 准备</h4> <p>准备阶段是正式为类中定义的变量（即静态变量）分配内存并设置类变量初始值的阶段，JDK8之后，类变量会存放在Java堆，从JDk7起，字符串常量池移出永久代，JDK8取消了永久代</p> <p>这时候进行内存分配的仅包括类变量，而不包括实例变量，一般初始值指的是零值，特殊情况是类字段的字段属性表中存在ConstantValue属性，拿在准备阶段变量值就会被初始化为ConstantValue所指定的值，例如：</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> value <span class="token operator">=</span> <span class="token number">123</span><span class="token punctuation">;</span>
+</code></pre></div><p>编译时Javac将会为value生成ConstantValue属性，在准备阶段虚拟机就会根据ConstantValue的设置将value赋值为123</p> <table><thead><tr><th>数据类型</th> <th>零值</th></tr></thead> <tbody><tr><td>int</td> <td>0</td></tr> <tr><td>long</td> <td>0L</td></tr> <tr><td>short</td> <td>(short)0</td></tr> <tr><td>char</td> <td>'\u0000'</td></tr> <tr><td>byte</td> <td>(byte)0</td></tr> <tr><td>boolean</td> <td>false</td></tr> <tr><td>float</td> <td>0.0f</td></tr> <tr><td>double</td> <td>0.0d</td></tr> <tr><td>reference</td> <td>null</td></tr></tbody></table> <h4 id="解析"><a href="#解析" class="header-anchor">#</a> 解析</h4> <p>解析阶段是Java虚拟机将常量池内的符号引用（字面量）替换为直接引用（内存指针）的过程</p> <ul><li>类或接口解析</li> <li>字段解析</li> <li>方法解析</li> <li>接口方法解析</li></ul> <h4 id="初始化"><a href="#初始化" class="header-anchor">#</a> 初始化</h4> <p>直到初始化阶段，Java虚拟机才真正开始执行类中编写的Java程序代码，将主导权移交给应用程序，初始化阶段就是执行类构造器<code>&lt;clinit()&gt;</code>方法的过程，它是由java编译器自动生成的方法</p> <ul><li><p><code>&lt;clinit()&gt;</code>方法是由编译器自动收集类中的所有类变量的赋值动作和静态语句块中的语句合并产生的，编译器收集的顺序是由语句在源文件中出现的顺序决定的，静态语句块只能访问到定义在静态语句块之前的变量，定义在它之后的变量，在前面的静态语句块可以赋值，但是不能访问</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span>
+    <span class="token keyword">static</span> <span class="token punctuation">{</span>
+        i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">// 编译通过</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 提示 非法前向引用</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div></li> <li><p><code>&lt;clinit()&gt;</code>方法与类的构造函数（在虚拟机视角中的实例构造器<code>&lt;init&gt;()</code>方法）不同，他不需要显式调用父类构造器，Java虚拟机会保证在子类的<code>&lt;clinit()&gt;</code>方法执行前，父类的<code>&lt;clinit()&gt;</code>方法已经执行完毕，因此第一个被执行<code>&lt;clinit()&gt;</code>方法的类型肯定是<code>java.lang.Object</code></p></li> <li><p>由于父类的<code>&lt;clinit()&gt;</code>方法先执行，也就意味着父类中定义的静态语句块要优先于子类的变量赋值操作</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Parent</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token class-name">A</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">static</span> <span class="token punctuation">{</span>
+        <span class="token class-name">A</span> <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Sub</span> <span class="token keyword">extends</span> <span class="token class-name">Parent</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token class-name">B</span> <span class="token operator">=</span> <span class="token class-name">A</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">Sub</span><span class="token punctuation">.</span><span class="token class-name">B</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment">// 2</span>
+</code></pre></div></li> <li><p><code>&lt;clinit()&gt;</code>方法对于类或接口不是必须的，如果一个类中没有静态语句块，也没有对变量的赋值操作，那么编译器就不为这个类生成<code>&lt;clinit()&gt;</code>方法</p></li> <li><p>接口执行<code>&lt;clinit()&gt;</code>方法不需要先执行父接口的<code>&lt;clinit()&gt;</code>方法，只有当父接口中定义的变量被使用时，父接口才会被初始化，此外，接口的实现类在初始化时也一样不会执行接口的<code>&lt;clinit()&gt;</code>方法</p></li> <li><p>Java虚拟机必须保证一个类的<code>&lt;clinit()&gt;</code>方法在多线程环境中被正确地加锁同步</p></li></ul> <h3 id="类加载器"><a href="#类加载器" class="header-anchor">#</a> 类加载器</h3> <p>JDK9之前：</p> <ul><li>启动类加载器</li> <li>扩展类加载器</li> <li>应用程序类加载器</li> <li>自定义类记载器</li></ul> <p>JDK9之后：</p> <ul><li>启动类加载器</li> <li>平台类加载器</li> <li>应用程序类加载器</li> <li>自定义加载器</li></ul></div> <footer class="page-edit" style="display:none;"><!----> <!----></footer> <!----> <!----> <!----></main> <!----></div></div></div></div><div class="global-ui"><div class="back-to-ceiling" style="right:1rem;bottom:6rem;width:2.5rem;height:2.5rem;border-radius:.25rem;line-height:2.5rem;display:none;" data-v-c6073ba8 data-v-c6073ba8><svg t="1574745035067" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5404" class="icon" data-v-c6073ba8><path d="M526.60727968 10.90185116a27.675 27.675 0 0 0-29.21455937 0c-131.36607665 82.28402758-218.69155461 228.01873535-218.69155402 394.07834331a462.20625001 462.20625001 0 0 0 5.36959153 69.94390903c1.00431239 6.55289093-0.34802892 13.13561351-3.76865779 18.80351572-32.63518765 54.11355614-51.75690182 118.55860487-51.7569018 187.94566865a371.06718723 371.06718723 0 0 0 11.50484808 91.98906777c6.53300375 25.50556257 41.68394495 28.14064038 52.69160883 4.22606766 17.37162448-37.73630017 42.14135425-72.50938081 72.80769204-103.21549295 2.18761121 3.04276886 4.15646224 6.24463696 6.40373557 9.22774369a1871.4375 1871.4375 0 0 0 140.04691725 5.34970492 1866.36093723 1866.36093723 0 0 0 140.04691723-5.34970492c2.24727335-2.98310674 4.21612437-6.18497483 6.3937923-9.2178004 30.66633723 30.70611158 55.4360664 65.4791928 72.80769147 103.21549355 11.00766384 23.91457269 46.15860503 21.27949489 52.69160879-4.22606768a371.15156223 371.15156223 0 0 0 11.514792-91.99901164c0-69.36717486-19.13165746-133.82216804-51.75690182-187.92578088-3.42062944-5.66790279-4.76302748-12.26056868-3.76865837-18.80351632a462.20625001 462.20625001 0 0 0 5.36959269-69.943909c-0.00994388-166.08943902-87.32547796-311.81420293-218.6915546-394.09823051zM605.93803103 357.87693858a93.93749974 93.93749974 0 1 1-187.89594924 6.1e-7 93.93749974 93.93749974 0 0 1 187.89594924-6.1e-7z" p-id="5405" data-v-c6073ba8></path><path d="M429.50777625 765.63860547C429.50777625 803.39355007 466.44236686 1000.39046097 512.00932183 1000.39046097c45.56695499 0 82.4922232-197.00623328 82.5015456-234.7518555 0-37.75494459-36.9345906-68.35043303-82.4922232-68.34111062-45.57627738-0.00932239-82.52019037 30.59548842-82.51086798 68.34111062z" p-id="5406" data-v-c6073ba8></path></svg></div></div></div>
+    <script src="/assets/js/app.e21cda02.js" defer></script><script src="/assets/js/3.c54ea6da.js" defer></script><script src="/assets/js/1.8a6c8a3f.js" defer></script><script src="/assets/js/33.459f616a.js" defer></script>
+  </body>
+</html>

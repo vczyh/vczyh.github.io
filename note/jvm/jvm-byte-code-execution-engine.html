@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>虚拟机字节码执行引擎 | VCZYH</title>
+    <meta name="generator" content="VuePress 1.5.0">
+    
+    <meta name="description" content="虽不会写诗，但志在远方。">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <link rel="preload" href="/assets/css/0.styles.d575fe45.css" as="style"><link rel="preload" href="/assets/js/app.e21cda02.js" as="script"><link rel="preload" href="/assets/js/3.c54ea6da.js" as="script"><link rel="preload" href="/assets/js/1.8a6c8a3f.js" as="script"><link rel="preload" href="/assets/js/31.1c46d333.js" as="script"><link rel="prefetch" href="/assets/js/10.8182b169.js"><link rel="prefetch" href="/assets/js/11.cdfed804.js"><link rel="prefetch" href="/assets/js/12.398afd20.js"><link rel="prefetch" href="/assets/js/13.9ba58032.js"><link rel="prefetch" href="/assets/js/14.e98cb686.js"><link rel="prefetch" href="/assets/js/15.89df4d42.js"><link rel="prefetch" href="/assets/js/16.63efb478.js"><link rel="prefetch" href="/assets/js/17.0d2f280b.js"><link rel="prefetch" href="/assets/js/18.724e39c8.js"><link rel="prefetch" href="/assets/js/19.f5c3121a.js"><link rel="prefetch" href="/assets/js/20.34d98b79.js"><link rel="prefetch" href="/assets/js/21.61095a70.js"><link rel="prefetch" href="/assets/js/22.dc17f1d0.js"><link rel="prefetch" href="/assets/js/23.5940d698.js"><link rel="prefetch" href="/assets/js/24.0b1321d4.js"><link rel="prefetch" href="/assets/js/25.33593c03.js"><link rel="prefetch" href="/assets/js/26.6f209b6c.js"><link rel="prefetch" href="/assets/js/27.ac928d09.js"><link rel="prefetch" href="/assets/js/28.295cbeb0.js"><link rel="prefetch" href="/assets/js/29.f38d7a26.js"><link rel="prefetch" href="/assets/js/30.babbbfb6.js"><link rel="prefetch" href="/assets/js/32.44ae445d.js"><link rel="prefetch" href="/assets/js/33.459f616a.js"><link rel="prefetch" href="/assets/js/34.91405a43.js"><link rel="prefetch" href="/assets/js/35.0a7e6ea6.js"><link rel="prefetch" href="/assets/js/36.0b539230.js"><link rel="prefetch" href="/assets/js/37.a04031ac.js"><link rel="prefetch" href="/assets/js/4.757f30d9.js"><link rel="prefetch" href="/assets/js/5.2688c9ee.js"><link rel="prefetch" href="/assets/js/6.4e36e6aa.js"><link rel="prefetch" href="/assets/js/7.c18b5337.js"><link rel="prefetch" href="/assets/js/8.9376a1a2.js"><link rel="prefetch" href="/assets/js/9.901a424a.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.d575fe45.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container" data-v-2d5f533b><div data-v-2d5f533b><div id="loader-wrapper" class="loading-wrapper" data-v-d48f4d20 data-v-2d5f533b data-v-2d5f533b><div class="loader-main" data-v-d48f4d20><div data-v-d48f4d20></div><div data-v-d48f4d20></div><div data-v-d48f4d20></div><div data-v-d48f4d20></div></div> <!----> <!----></div> <div class="password-shadow password-wrapper-out" style="display:none;" data-v-64685f0e data-v-2d5f533b data-v-2d5f533b><h3 class="title" style="display:none;" data-v-64685f0e data-v-64685f0e>VCZYH</h3> <!----> <label id="box" class="inputBox" style="display:none;" data-v-64685f0e data-v-64685f0e><input type="password" value="" data-v-64685f0e> <span data-v-64685f0e>Konck! Knock!</span> <button data-v-64685f0e>OK</button></label> <div class="footer" style="display:none;" data-v-64685f0e data-v-64685f0e><span data-v-64685f0e><i class="iconfont reco-theme" data-v-64685f0e></i> <a target="blank" href="https://vuepress-theme-reco.recoluan.com" data-v-64685f0e>vuePress-theme-reco</a></span> <span data-v-64685f0e><i class="iconfont reco-copyright" data-v-64685f0e></i> <a data-v-64685f0e><span data-v-64685f0e>vczyh</span>
+            
+          <span data-v-64685f0e>2018 - </span>
+          2020
+        </a></span></div></div> <div class="hide" data-v-2d5f533b><header class="navbar" data-v-2d5f533b><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><img src="/avatar.jpg" alt="VCZYH" class="logo"> <span class="site-name">VCZYH</span></a> <div class="links"><div class="color-picker"><a class="color-button"><i class="iconfont reco-color"></i></a> <div class="color-picker-menu" style="display:none;"><div class="mode-options"><h4 class="title">Choose mode</h4> <ul class="color-mode-options"><li class="dark">dark</li><li class="auto active">auto</li><li class="light">light</li></ul></div></div></div> <div class="search-box"><i class="iconfont reco-search"></i> <input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link"><i class="iconfont reco-home"></i>
+  首页
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title"><i class="iconfont reco-category"></i>
+      分类
+    </span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/后端/" class="nav-link"><i class="iconfont undefined"></i>
+  后端
+</a></li><li class="dropdown-item"><!----> <a href="/categories/随笔/" class="nav-link"><i class="iconfont undefined"></i>
+  随笔
+</a></li><li class="dropdown-item"><!----> <a href="/categories/前端/" class="nav-link"><i class="iconfont undefined"></i>
+  前端
+</a></li><li class="dropdown-item"><!----> <a href="/categories/编程/" class="nav-link"><i class="iconfont undefined"></i>
+  编程
+</a></li></ul></div></div><div class="nav-item"><a href="/tag/" class="nav-link"><i class="iconfont reco-tag"></i>
+  标签云
+</a></div><div class="nav-item"><a href="/timeline/" class="nav-link"><i class="iconfont reco-date"></i>
+  时间轴
+</a></div><div class="nav-item"><a href="/note/" class="nav-link router-link-active"><i class="iconfont reco-message"></i>
+  笔记
+</a></div><div class="nav-item"><a href="/other/leave/" class="nav-link"><i class="iconfont reco-suggestion"></i>
+  留言板
+</a></div><div class="nav-item"><a href="/other/friend/" class="nav-link"><i class="iconfont undefined"></i>
+  友链
+</a></div><div class="nav-item"><a href="/other/about/" class="nav-link"><i class="iconfont undefined"></i>
+  About
+</a></div> <!----></nav></div></header> <div class="sidebar-mask" data-v-2d5f533b></div> <aside class="sidebar" data-v-2d5f533b><div class="personal-info-wrapper" data-v-ca798c94 data-v-2d5f533b><img src="/avatar.jpg" alt="author-avatar" class="personal-img" data-v-ca798c94> <h3 class="name" data-v-ca798c94>
+    vczyh
+  </h3> <div class="num" data-v-ca798c94><div data-v-ca798c94><h3 data-v-ca798c94>16</h3> <h6 data-v-ca798c94>文章</h6></div> <div data-v-ca798c94><h3 data-v-ca798c94>17</h3> <h6 data-v-ca798c94>标签</h6></div></div> <hr data-v-ca798c94></div> <nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link"><i class="iconfont reco-home"></i>
+  首页
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title"><i class="iconfont reco-category"></i>
+      分类
+    </span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/categories/后端/" class="nav-link"><i class="iconfont undefined"></i>
+  后端
+</a></li><li class="dropdown-item"><!----> <a href="/categories/随笔/" class="nav-link"><i class="iconfont undefined"></i>
+  随笔
+</a></li><li class="dropdown-item"><!----> <a href="/categories/前端/" class="nav-link"><i class="iconfont undefined"></i>
+  前端
+</a></li><li class="dropdown-item"><!----> <a href="/categories/编程/" class="nav-link"><i class="iconfont undefined"></i>
+  编程
+</a></li></ul></div></div><div class="nav-item"><a href="/tag/" class="nav-link"><i class="iconfont reco-tag"></i>
+  标签云
+</a></div><div class="nav-item"><a href="/timeline/" class="nav-link"><i class="iconfont reco-date"></i>
+  时间轴
+</a></div><div class="nav-item"><a href="/note/" class="nav-link router-link-active"><i class="iconfont reco-message"></i>
+  笔记
+</a></div><div class="nav-item"><a href="/other/leave/" class="nav-link"><i class="iconfont reco-suggestion"></i>
+  留言板
+</a></div><div class="nav-item"><a href="/other/friend/" class="nav-link"><i class="iconfont undefined"></i>
+  友链
+</a></div><div class="nav-item"><a href="/other/about/" class="nav-link"><i class="iconfont undefined"></i>
+  About
+</a></div> <!----></nav> <ul class="sidebar-links"><li><a href="/note/" aria-current="page" class="sidebar-link">介绍</a></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>Java 虚拟机</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/note/jvm/jvm-memory-and-exception.html" class="sidebar-link">Java内存区域与内存溢出异常</a></li><li><a href="/note/jvm/jvm-class-file-structure.html" class="sidebar-link">类文件结构</a></li><li><a href="/note/jvm/jvm-class-loading-mechanism.html" class="sidebar-link">虚拟机类加载机制</a></li><li><a href="/note/jvm/jvm-byte-code-execution-engine.html" aria-current="page" class="active sidebar-link">虚拟机字节码执行引擎</a></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Docker</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <div class="password-shadow password-wrapper-in" style="display:none;" data-v-64685f0e data-v-2d5f533b><h3 class="title" style="display:none;" data-v-64685f0e data-v-64685f0e>虚拟机字节码执行引擎</h3> <!----> <label id="box" class="inputBox" style="display:none;" data-v-64685f0e data-v-64685f0e><input type="password" value="" data-v-64685f0e> <span data-v-64685f0e>Konck! Knock!</span> <button data-v-64685f0e>OK</button></label> <div class="footer" style="display:none;" data-v-64685f0e data-v-64685f0e><span data-v-64685f0e><i class="iconfont reco-theme" data-v-64685f0e></i> <a target="blank" href="https://vuepress-theme-reco.recoluan.com" data-v-64685f0e>vuePress-theme-reco</a></span> <span data-v-64685f0e><i class="iconfont reco-copyright" data-v-64685f0e></i> <a data-v-64685f0e><span data-v-64685f0e>vczyh</span>
+            
+          <span data-v-64685f0e>2018 - </span>
+          2020
+        </a></span></div></div> <div data-v-2d5f533b><main class="page"><div class="page-title" style="display:none;"><h1 class="title">虚拟机字节码执行引擎</h1> <div data-v-3b7f5bdf><i class="iconfont reco-account" data-v-3b7f5bdf><span data-v-3b7f5bdf>vczyh</span></i> <i class="iconfont reco-date" data-v-3b7f5bdf><span data-v-3b7f5bdf>2020-02-18</span></i> <i class="iconfont reco-eye" data-v-3b7f5bdf><span id="/note/jvm/jvm-byte-code-execution-engine.html" data-flag-title="Your Article Title" class="leancloud-visitors" data-v-3b7f5bdf><a class="leancloud-visitors-count" style="font-size:.9rem;font-weight:normal;color:#999;"></a></span></i> <i class="iconfont reco-tag tags" data-v-3b7f5bdf><span class="tag-item" data-v-3b7f5bdf>Java</span><span class="tag-item" data-v-3b7f5bdf>JVM</span></i></div></div> <div class="theme-reco-content content__default" style="display:none;"><h3 id="概述"><a href="#概述" class="header-anchor">#</a> 概述</h3> <p>执行引擎在执行字节码的时候，通常会有解释执行和编译执行（JIT）两种选择，也可能两者兼备。</p> <h3 id="运行时栈帧结构"><a href="#运行时栈帧结构" class="header-anchor">#</a> 运行时栈帧结构</h3> <p>Java虚拟机以方法作为最基本的执行单元，“栈帧”（Stack Frame）则是用于支持虚拟机进行方法调用和方法执行背后的数据结构，也是虚拟机运行时数据区中的虚拟机栈的栈元素，每一个方法从调用开始到执行结束的过程，都对应着一个栈帧从入栈到出栈的过程</p> <ol><li>编译源码的时候，栈帧中需要多大的局部变量表，需要多深的操作数栈就已经被分析出来了，并写入Code属性中</li> <li>在活动线程中，只有栈顶的栈帧才是生效的，其被称为“当前栈帧”，关联的方法称为“当前方法”</li></ol> <h4 id="局部变量表（local-variables-table）"><a href="#局部变量表（local-variables-table）" class="header-anchor">#</a> 局部变量表（Local Variables Table）</h4> <p>用于存放方法参数和方法内部定义的局部变量</p> <ol><li>Code属性中的max_locals表示局部变量表的最大容量，此值在编译时确定</li> <li>局部变量表的容量以变量槽（Variab Solt）为最小单位，虚拟机规范并没有约束变量槽的大小</li> <li>每个变量槽可以存放 boolean、byte、char、short、int、float、reference和returnAddress这八种类型
+<ul><li>通过reference可以找到对象在Java堆中的地址或索引</li> <li>通过reference可以查找到对象所属数据类型在方法区中的存储的类型信息（支持反射的原因）</li></ul></li> <li>有关long和double类型在变量槽的存储
+<ul><li>如果变量槽为32位，会为64位数据以高位对齐的方式分配两个连续的变量槽空间</li> <li>如果访问64位数据的变量槽，则会同时使用两个变量槽，不允许只访问其中一个</li></ul></li> <li>通过索引访问局部变量表，范围是0 ~ 变量槽的最大数量</li> <li>实例方法的第0位索引的变量槽默认是this</li> <li>变量槽可以重用，超出作用域的变量，它的变量槽可以被其他变量重用</li> <li>局部变量必须显式赋值</li></ol> <h4 id="操作数栈（operand-stack）"><a href="#操作数栈（operand-stack）" class="header-anchor">#</a> 操作数栈（Operand Stack）</h4> <ol><li>Code属性中的max_stacks表示操作数栈的最大深度，此值在编译时确定</li> <li>操作数栈的元素可以是任何Java数据类型</li> <li>32位数据类型所占栈容量为1，64位数据类型所占的栈容量为2</li> <li>大部分虚拟机的下面栈帧的部分操作数栈与上面栈帧的部分局部变量重叠在一起，可以节约空间，共享一部分数据，无须复制传递</li></ol> <h4 id="动态连接-todo"><a href="#动态连接-todo" class="header-anchor">#</a> 动态连接 // todo</h4> <p>每个栈帧都包含一个指向运行时常量池中该栈帧所属方法的引用，持有这个引用是为了支持方法调用过程中的动态连接</p> <h4 id="方法返回地址"><a href="#方法返回地址" class="header-anchor">#</a> 方法返回地址</h4> <p>一个方法开始执行后，有两种方式退出这个方法：</p> <ol><li><p>正常调用完成：执行引擎遇到一个方法返回的字节码指令</p> <ul><li><p>会为上层调用者提供返回值</p></li> <li><p>返回地址由PC决定</p></li></ul></li> <li><p>异常调用完成：虚拟机内部错误或者异常表中没有匹配到异常处理器</p> <ul><li>不会为上层调用者提供返回值</li> <li>返回地址通过异常表处理器来确定</li></ul></li></ol> <h3 id="方法调用"><a href="#方法调用" class="header-anchor">#</a> 方法调用</h3> <h4 id="解析"><a href="#解析" class="header-anchor">#</a> 解析</h4> <p>在编译时期确定唯一调用版本，即在类加载的时候就会将符号引用解析为该方法的直接引用，这类方法称为解析</p> <p>调用方法的字节码指令：</p> <ul><li>invokestatic：用于调用静态方法</li> <li>invokespecial：用于调用实例构造器<code>&lt;init&gt;()</code>方法、私有方法和父类方法</li> <li>invokevirtual：用于调用所有虚方法</li> <li>invokedynamic：现在运行时动态解析出调用点限定符所引用的方法，然后再执行该指令的分派逻辑是由用户设定的引导方法来决定的</li></ul> <p>只要能被invokestatic和invokespecial调用的方法，都可以在解析阶段确定唯一调用版本， 符合条件的有：</p> <ul><li>静态方法</li> <li>私有方法</li> <li>实例构造器</li> <li>父类方法</li> <li>final修饰的方法（使用invokevirtual指令调用）</li></ul> <p>这6种方法统称为“非虚方法”，其他方法称为“虚方法”</p> <h4 id="分派"><a href="#分派" class="header-anchor">#</a> 分派</h4> <h5 id="静态分派"><a href="#静态分派" class="header-anchor">#</a> 静态分派</h5> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">StaticDispatch</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">Human</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Man</span> <span class="token keyword">extends</span> <span class="token class-name">Human</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Woman</span> <span class="token keyword">extends</span> <span class="token class-name">Human</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token class-name">Human</span> guy<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">&quot;hello,guy&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token class-name">Man</span> guy<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">&quot;hello,gentleman&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token class-name">Woman</span> guy<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">&quot;hello,lady&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Human 静态类型</span>
+        <span class="token comment">// Man 实际类型</span>
+        <span class="token class-name">Human</span> man <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Man</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Human</span> woman <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Woman</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">StaticDispatch</span> dispatch <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StaticDispatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        dispatch<span class="token punctuation">.</span><span class="token function">sayHello</span><span class="token punctuation">(</span>man<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        dispatch<span class="token punctuation">.</span><span class="token function">sayHello</span><span class="token punctuation">(</span>woman<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment">// hello,guy</span>
+<span class="token comment">// hello,guy</span>
+</code></pre></div><p>编译器在重载时是通过参数的静态类型而不是实际类型作为判定依据，<strong>在编译期</strong>就根据静态类型选择了哪个重载版本，调用使用invokevirtual指令。所有依赖静态类型来决定方法执行版本的分派动作，都称为<strong>静态分派</strong>，静态分派的典型应用表现就是方法重载。解析与分派之间的关系并不是排他关系，例如静态方法会在编译期确定，在类加载期就进行解析，而静态方法也是可以拥有重载版本的，选择重载版本的过程也是通过静态分派完成的。</p> <h5 id="动态分派"><a href="#动态分派" class="header-anchor">#</a> 动态分派</h5> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DynamicDispatch</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">Human</span> <span class="token punctuation">{</span>
+        <span class="token keyword">protected</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Man</span> <span class="token keyword">extends</span> <span class="token class-name">Human</span> <span class="token punctuation">{</span>
+        <span class="token annotation punctuation">@Override</span>
+        <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">&quot;man,hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Woman</span> <span class="token keyword">extends</span> <span class="token class-name">Human</span> <span class="token punctuation">{</span>
+        <span class="token annotation punctuation">@Override</span>
+        <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">&quot;lady,hello&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Human</span> man <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Man</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Human</span> woman <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Woman</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        man<span class="token punctuation">.</span><span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        woman<span class="token punctuation">.</span><span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        man <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Woman</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        man<span class="token punctuation">.</span><span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// man,hello</span>
+<span class="token comment">// lady,hello</span>
+<span class="token comment">// lady,hello</span>
+</code></pre></div><p>把这种在<strong>运行期</strong>根据实际类型确定方法执行版本的分派过程称为动态分派</p> <div class="language-java extra-class"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">FieldHasNoPolymorphic</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Father</span> <span class="token punctuation">{</span>
+        <span class="token keyword">public</span> <span class="token keyword">int</span> money <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">public</span> <span class="token class-name">Father</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            money <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+            <span class="token function">showMoney</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">showMoney</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">&quot;I am father, I have &quot;</span> <span class="token operator">+</span> money<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Son</span> <span class="token keyword">extends</span> <span class="token class-name">Father</span> <span class="token punctuation">{</span>
+        <span class="token keyword">public</span> <span class="token keyword">int</span> money <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">public</span> <span class="token class-name">Son</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            money <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">;</span>
+            <span class="token function">showMoney</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">showMoney</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">&quot;I am son, I have &quot;</span> <span class="token operator">+</span> money<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Father</span> gay <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Son</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>gay<span class="token punctuation">.</span>money<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>字段不参加多态，字段跟随静态类型</p> <h5 id="单分派与多分派"><a href="#单分派与多分派" class="header-anchor">#</a> 单分派与多分派</h5> <p>方法的接受者与方法的参数都称为方法的宗量。</p> <p>静态分派属于多分派类型，动态分派属于单分派类型</p> <h5 id="虚拟机动态分派的实现"><a href="#虚拟机动态分派的实现" class="header-anchor">#</a> 虚拟机动态分派的实现</h5> <p>动态分派是非常频繁的动作，动态分派会在接受者类型的元数据中搜索合适的目标方法，因此为了提高效率，比较常见的手段是为类型在方法区中建立一个虚方法表，与此对应的，在invokeinterface执行时也会用到接口方法表，使用虚方法表索引来代替元数据查找以提高性能。虚方法表在类加载的连接阶段进行初始化。</p></div> <footer class="page-edit" style="display:none;"><!----> <!----></footer> <!----> <!----> <!----></main> <!----></div></div></div></div><div class="global-ui"><div class="back-to-ceiling" style="right:1rem;bottom:6rem;width:2.5rem;height:2.5rem;border-radius:.25rem;line-height:2.5rem;display:none;" data-v-c6073ba8 data-v-c6073ba8><svg t="1574745035067" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5404" class="icon" data-v-c6073ba8><path d="M526.60727968 10.90185116a27.675 27.675 0 0 0-29.21455937 0c-131.36607665 82.28402758-218.69155461 228.01873535-218.69155402 394.07834331a462.20625001 462.20625001 0 0 0 5.36959153 69.94390903c1.00431239 6.55289093-0.34802892 13.13561351-3.76865779 18.80351572-32.63518765 54.11355614-51.75690182 118.55860487-51.7569018 187.94566865a371.06718723 371.06718723 0 0 0 11.50484808 91.98906777c6.53300375 25.50556257 41.68394495 28.14064038 52.69160883 4.22606766 17.37162448-37.73630017 42.14135425-72.50938081 72.80769204-103.21549295 2.18761121 3.04276886 4.15646224 6.24463696 6.40373557 9.22774369a1871.4375 1871.4375 0 0 0 140.04691725 5.34970492 1866.36093723 1866.36093723 0 0 0 140.04691723-5.34970492c2.24727335-2.98310674 4.21612437-6.18497483 6.3937923-9.2178004 30.66633723 30.70611158 55.4360664 65.4791928 72.80769147 103.21549355 11.00766384 23.91457269 46.15860503 21.27949489 52.69160879-4.22606768a371.15156223 371.15156223 0 0 0 11.514792-91.99901164c0-69.36717486-19.13165746-133.82216804-51.75690182-187.92578088-3.42062944-5.66790279-4.76302748-12.26056868-3.76865837-18.80351632a462.20625001 462.20625001 0 0 0 5.36959269-69.943909c-0.00994388-166.08943902-87.32547796-311.81420293-218.6915546-394.09823051zM605.93803103 357.87693858a93.93749974 93.93749974 0 1 1-187.89594924 6.1e-7 93.93749974 93.93749974 0 0 1 187.89594924-6.1e-7z" p-id="5405" data-v-c6073ba8></path><path d="M429.50777625 765.63860547C429.50777625 803.39355007 466.44236686 1000.39046097 512.00932183 1000.39046097c45.56695499 0 82.4922232-197.00623328 82.5015456-234.7518555 0-37.75494459-36.9345906-68.35043303-82.4922232-68.34111062-45.57627738-0.00932239-82.52019037 30.59548842-82.51086798 68.34111062z" p-id="5406" data-v-c6073ba8></path></svg></div></div></div>
+    <script src="/assets/js/app.e21cda02.js" defer></script><script src="/assets/js/3.c54ea6da.js" defer></script><script src="/assets/js/1.8a6c8a3f.js" defer></script><script src="/assets/js/31.1c46d333.js" defer></script>
+  </body>
+</html>
